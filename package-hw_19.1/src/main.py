@@ -5,14 +5,86 @@ hostName = "localhost"
 serverPort = 8080
 
 class MyServer(BaseHTTPRequestHandler):
-    
-    """ 
-        Специальный класс, который отвечает за 
-        обработку входящих запросов от клиентов
-    """
+
+    def __get_html_content(self):
+        return """
+        <!doctype html>
+<html lang="ru">
+
+<head>
+    <!-- <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 5 демонстрационная страница</title> -->
+    <!-- Кодировка веб-страницы -->
+    <meta charset="utf-8">
+    <!-- Настройка viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>...</title>
+
+    <!-- Bootstrap CSS (jsDelivr CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <div class="col-sm-12">
+                    <h2 class="text-white">Меню
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <button type="button" class="btn btn-outline-primary">Главная</button>
+                            <button type="button" class="btn btn-outline-primary">Категории</button>
+                            <button type="button" class="btn btn-outline-primary">Заказы</button>
+                            <button type="button" class="btn btn-outline-primary">Контакты</button>
+                        </div>
+                    </h2>
+                </div>
+            </a>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <h1 align="center">Контакты</h1>
+        <div class="col-2 ml-auto mr-3 bg-white" style="height: 25px;"></div>
+        <div class="row d-flex justify-content-around">
+            <div class="col-2">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3" style="width: 18rem;">
+                            <label for="exampleInputEmail1" class="form-label">Имя</label>
+                            <input type="name" class="form-control" id="exampleInputName" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3" style="width: 18rem;">
+                            <label for="exampleInputPassword1" class="form-label">Почта</label>
+                            <input type="email" class="form-control" id="exampleInputEmail">
+                        </div>
+                        <div class="mb-3" style="width: 18rem;">
+                            <label for="exampleFormControlTextarea1">Сообщение</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-2">
+                <h3>Наши контакты</h3>
+                <p class="lh-sm">телефон +7(xxx)-xxx-xx-xx, 
+                почта: rand@mail.com</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+        """
+
     def do_GET(self):
         query_components = parse_qs(urlparse(self.path).query)
-        page_content = "test_text"
+        page_content = self.__get_html_content()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
@@ -20,7 +92,7 @@ class MyServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     webserver = HTTPServer((hostName, serverPort), MyServer)
-    print("Server started https://%s:%s" %(hostName, serverPort))
+    print("Server started http://%s:%s" %(hostName, serverPort))
 
     try :
         webserver.serve_forever()
